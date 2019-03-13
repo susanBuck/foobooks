@@ -2,6 +2,8 @@
 
 return [
 
+    'supportEmail' => 'susanbuck@fas.harvard.edu',
+
     /*
     |--------------------------------------------------------------------------
     | Mail Driver
