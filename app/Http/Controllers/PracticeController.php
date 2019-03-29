@@ -5,9 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use IanLChapman\PigLatinTranslator\Parser;
 
-
 class PracticeController extends Controller
 {
+
+    /**
+     *
+     */
+    public function practice4()
+    {
+    }
 
     /**
      *
@@ -24,7 +30,7 @@ class PracticeController extends Controller
      */
     public function practice2()
     {
-        return 'Need help? Email us at '.config('mail.supportEmail');
+        return 'Need help? Email us at ' . config('mail.supportEmail');
     }
 
     /**
@@ -55,7 +61,6 @@ class PracticeController extends Controller
 
             # Invoke the requested method if it exists; if not, throw a 404 error
             return (method_exists($this, $method)) ? $this->$method() : abort(404);
-
         } # If no `n` is specified, show index of all available methods
         else {
             # Build an array of all methods in this class that start with `practice`
@@ -67,7 +72,6 @@ class PracticeController extends Controller
 
             # Load the view and pass it the array of methods
             return view('practice')->with(['methods' => $methods]);
-
         }
     }
 }
