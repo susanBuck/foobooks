@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use IanLChapman\PigLatinTranslator\Parser;
 
+
 class PracticeController extends Controller
 {
-
     /**
-     *
+     * Example for Bret
+     * https://github.com/susanBuck/dwa15-spring2019/issues/35
      */
     public function practice4()
     {
+        return view('practice.practice4')->with(['day' => 'tue']);
     }
 
     /**
