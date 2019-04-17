@@ -4,10 +4,85 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use IanLChapman\PigLatinTranslator\Parser;
-
+use App\Book;
 
 class PracticeController extends Controller
 {
+
+    /**
+     * Week 11 - DELETE example
+     */
+    public function practice8()
+    {
+        # First get a book to delete
+        $book = Book::where('author', '=', 'F. Scott Fitzgerald')->first();
+
+        if (!$book) {
+            dump('Did not delete- Book not found.');
+        } else {
+            $book->delete();
+            dump('Deletion complete; check the database to see if it worked...');
+        }
+    }
+
+    /**
+     * Week 11 - UPDATE example
+     */
+    public function practice7()
+    {
+        # First get a book to update
+        $book = Book::where('author', '=', 'F. Scott Fitzgerald')->first();
+
+        if (!$book) {
+            dump("Book not found, can't update.");
+        } else {
+            # Change some properties
+            $book->title = 'The Really Great Gatsby';
+            $book->published_year = '2025';
+
+            # Save the changes
+            $book->save();
+
+            dump('Update complete; check the database to confirm the update worked.');
+        }
+    }
+
+    /*
+     * Week 11 - READ example
+     */
+    public function practice6()
+    {
+        $book = new Book();
+        $books = $book->where('title', 'LIKE', '%Harry Potter%')->get();
+
+        if ($books->isEmpty()) {
+            dump('No matches found');
+        } else {
+            foreach ($books as $book) {
+                dump($book->title);
+            }
+        }
+    }
+
+    /*
+     * Week 11 - CREATE example
+     */
+    public function practice5()
+    {
+        $book = new Book();
+        # Set the properties
+        # Note how each property corresponds to a field in the table
+        $book->title = 'Harry Potter and the Sorcerer\'s Stone';
+        $book->author = 'J.K. Rowling';
+        $book->published_year = 1997;
+        $book->cover_url = 'http://prodimage.images-bn.com/pimages/9780590353427_p0_v1_s484x700.jpg';
+        $book->purchase_url = 'http://www.barnesandnoble.com/w/harry-potter-and-the-sorcerers-stone-j-k-rowling/1100036321?ean=9780590353427';
+
+        $book->save();
+
+        dump($book->toArray());
+    }
+
     /**
      * Example for Bret
      * https://github.com/susanBuck/dwa15-spring2019/issues/35
