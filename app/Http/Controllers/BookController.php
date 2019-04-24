@@ -4,24 +4,40 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App;
+use App\Book;
 
 class BookController extends Controller
 {
     /*
-     * GET /books/
+     * GET /books
      */
     public function index()
     {
-        return view('books.index');
+        # Get all the books from our library
+        $books = Book::orderBy('title')->get();
+
+        # Query on the existing collection to get our recently added books
+        $newBooks = $books->sortByDesc('created_at')->take(3);
+
+        return view('books.index')->with([
+            'books' => $books,
+            'newBooks' => $newBooks,
+        ]);
     }
 
     /*
-     * GET /books/{title}
+     * GET /books/{id}
      */
-    public function show($title)
+    public function show($id)
     {
+        $book = Book::find($id);
+
+        if (!$book) {
+            return redirect('/books')->with(['alert' => 'The book you were looking for was not found.']);
+        }
+
         return view('books.show')->with([
-            'title' => $title
+            'book' => $book
         ]);
     }
 
@@ -119,8 +135,46 @@ class BookController extends Controller
         # Note: If validation fails, it will redirect the visitor back to the form page
         # and none of the code that follows will execute.
 
-        # Code will eventually go here to add the book to the database,
-        # but for now we'll just dump the form data to the page for proof of concept
-        dump($request->all());
+        $book = new Book();
+        $book->title = $request->title;
+        $book->author = $request->author;
+        $book->published_year = $request->published_year;
+        $book->cover_url = $request->cover_url;
+        $book->purchase_url = $request->purchase_url;
+
+        $book->save();
+
+        return redirect('/books/create')->with(['alert' => 'The book ' . $book->title . ' was added.']);
+    }
+
+    /*
+     * GET /books/{id}/edit
+     */
+    public function edit($id)
+    {
+        $book = Book::find($id);
+
+        if (!$book) {
+            return redirect('/books')->with(['alert' => 'The book you were looking for was not found.']);
+        }
+
+        return view('books.edit')->with(['book' => $book]);
+    }
+
+    /*
+     * PUT /books/{id}
+     */
+    public function update(Request $request, $id)
+    {
+        $book = Book::find($id);
+        $book->title = $request->title;
+        $book->author = $request->author;
+        $book->published_year = $request->published_year;
+        $book->cover_url = $request->cover_url;
+        $book->purchase_url = $request->purchase_url;
+
+        $book->save();
+
+        return redirect('/books/' . $id . '/edit')->with(['alert' => 'Your changes were saved.']);
     }
 }

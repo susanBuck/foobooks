@@ -4,10 +4,25 @@
     Your Books
 @endsection
 
-@section('content')
-    <h1>Your books</h1>
+@section('head')
+    <link href='/css/books/index.css' rel='stylesheet'>
+    <link href='/css/books/_book.css' rel='stylesheet'>
+@endsection
 
-    <p>All your books will go here...</p>
+@section('content')
+    <section id='newBooks'>
+        <h2>Recently added books</h2>
+        @foreach($newBooks as $book)
+            @include('books._book')
+        @endforeach
+    </section>
+
+    <section id='allBooks'>
+        <h2>All books</h2>
+        @foreach($books as $book)
+            @include('books._book')
+        @endforeach
+    </section>
 @endsection
 
 

@@ -15,7 +15,7 @@
             <input type='text' name='searchTerm' id='searchTerm' value='{{ $searchTerm }}'>
             @include('includes.error-field', ['fieldName' => 'searchTerm'])
 
-            <input type='checkbox' name='caseSensitive' {{ ($caseSensitive) ? 'checked' : '' }}>
+            <input type='checkbox' name='caseSensitive' {{ (old('caseSensitive') or $caseSensitive) ? 'checked' : '' }}>
             <label>case sensitive</label>
         </fieldset>
 
