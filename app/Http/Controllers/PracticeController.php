@@ -8,6 +8,111 @@ use App\Book;
 
 class PracticeController extends Controller
 {
+    /**
+     *
+     */
+    public function practice15()
+    {
+        $books = Book::all();
+        dump($books->toArray());
+    }
+
+    /**
+     * [6 of 6] Solution to query practice from Week 11 assignment
+     * Remove any/all books with an author name that includes the string “Rowling”.
+     */
+    public function practice14()
+    {
+        # Show books before we do the delete
+        Book::dump();
+
+        # Do the delete
+        Book::where('author', 'LIKE', '%Rowling%')->delete();
+        dump('Deleted all books where author %Rowling%');
+
+        # Show books after the delete
+        Book::dump();
+        # Underlying SQL: delete from `books` where `author` LIKE '%Rowling%'
+    }
+
+    /**
+     * [5 of 6] Solution to query practice from Week 11 assignment
+     * Find any books by the author “J.K. Rowling” and update the author name to be “JK Rowling”.
+     */
+    public function practice13()
+    {
+        Book::dump();
+
+        # Approach # 1
+        # Get all the books that match the criteria
+//        $books = Book::where('author', '=', 'J.K. Rowling')->get();
+//
+//        $matches = $books->count();
+//        dump('Found ' . $matches . ' ' . str_plural('book', $matches) . ' that match this search criteria');
+//
+//        if ($matches > 0) {
+//            # Loop through each book and update them
+//            foreach ($books as $book) {
+//                $book->author = 'JK Rowling';
+//                $book->save();
+//                # Underlying SQL: update `books` set `updated_at` = '20XX-XX-XX XX:XX:XX', `author` = 'JK Rowling' where `id` = '4'
+//            }
+//        }
+
+        # Approach #2
+        # More ideal - Requires 1 query instead of 3
+        Book::where('author', '=', 'J.K. Rowling')->update(['author' => 'JK Rowling']);
+
+        Book::dump();
+    }
+
+    /**
+     * [4 of 6] Solution to query practice from Week 11 assignment
+     * Retrieve all the books in descending order according to published date
+     */
+    public function practice12()
+    {
+        $books = Book::orderByDesc('published_year')->get();
+        Book::dump($books);
+        # Underlying SQL: select * from `books` order by `published_year` desc
+    }
+
+    /**
+     * [3 of 6] Solution to query practice from Week 11 assignment
+     * Retrieve all the books in alphabetical order by title
+     */
+    public function practice11()
+    {
+        $books = Book::orderBy('title', 'asc')->get();
+        Book::dump($books);
+        # Underlying SQL: select * from `books` order by `title` asc
+    }
+
+    /**
+     * [2 of 6] Solution to query practice from Week 11 assignment
+     * Retrieve all the books published after 1950.
+     */
+    public function practice10()
+    {
+        $books = Book::where('published_year', '>', 1950)->get();
+        Book::dump($books);
+        # Underlying SQL: select * from `books` where `published` > '1950'
+    }
+
+    /**
+     * [1 of 6] Solution to query practice from Week 11 assignment
+     * Retrieve the last 2 books that were added to the books table.
+     */
+    public function practice9()
+    {
+        $books = Book::orderBy('id', 'desc')->limit(2)->get();
+
+        # Alternative approach using the `latest` convenience method:
+        #$books = Book::latest()->limit(2)->get();
+
+        Book::dump($books);
+        # Underlying SQL: select * from `books` order by `id` desc limit 2
+    }
 
     /**
      * Week 11 - DELETE example
