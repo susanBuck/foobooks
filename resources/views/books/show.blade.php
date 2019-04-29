@@ -20,6 +20,7 @@
         <ul class='bookActions'>
             <li><a href='{{ $book->purchase_url }}'><i class="fas fa-shopping-cart"></i> Purchase</a>
             <li><a href='/books/{{ $book->id }}/edit'><i class="fas fa-edit"></i> Edit</a>
+            <li><a href='/books/{{ $book->id }}/delete'><i class="fas fa-trash"></i> Delete</a>
         </ul>
     </div>
 @endsection

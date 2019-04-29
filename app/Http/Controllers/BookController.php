@@ -33,7 +33,7 @@ class BookController extends Controller
         $book = Book::find($id);
 
         if (!$book) {
-            return redirect('/books')->with(['alert' => 'The book you were looking for was not found.']);
+            return redirect('/books')->with(['alert' => 'Book not found']);
         }
 
         return view('books.show')->with([
@@ -155,7 +155,7 @@ class BookController extends Controller
         $book = Book::find($id);
 
         if (!$book) {
-            return redirect('/books')->with(['alert' => 'The book you were looking for was not found.']);
+            return redirect('/books')->with(['alert' => 'Book not found.']);
         }
 
         return view('books.edit')->with(['book' => $book]);
@@ -176,5 +176,36 @@ class BookController extends Controller
         $book->save();
 
         return redirect('/books/' . $id . '/edit')->with(['alert' => 'Your changes were saved.']);
+    }
+
+    /*
+    * Asks user to confirm they want to delete the book
+    * GET /books/{id}/delete
+    */
+    public function delete($id)
+    {
+        $book = Book::find($id);
+
+        if (!$book) {
+            return redirect('/books')->with(['alert' => 'Book not found']);
+        }
+
+        return view('books.delete')->with([
+            'book' => $book,
+        ]);
+    }
+
+    /*
+    * Deletes the book
+    * DELETE /books/{id}/delete
+    */
+    public function destroy($id)
+    {
+        $book = Book::find($id);
+        $book->delete();
+
+        return redirect('/books')->with([
+            'alert' => '“' . $book->title . '” was removed.'
+        ]);
     }
 }
