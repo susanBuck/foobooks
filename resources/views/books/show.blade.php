@@ -14,8 +14,14 @@
 
     <div class='book cf'>
         <img src='{{ $book->cover_url }}' class='cover' alt='Cover image for {{ $book->title }}'>
-        <p>By {{ $book->author }} ({{ $book->published_year }})</p>
+        <p>By {{ $book->author->getFullName() }} ({{ $book->published_year }})</p>
         <p>Added {{ $book->created_at->format('m/d/y') }}</p>
+
+        <p>
+            @foreach($book->tags as $tag)
+                <span class='tag'>{{ $tag->name }}</span>
+            @endforeach
+        </p>
 
         <ul class='bookActions'>
             <li><a href='{{ $book->purchase_url }}'><i class="fas fa-shopping-cart"></i> Purchase</a>

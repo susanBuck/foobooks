@@ -13,6 +13,13 @@
     text-align: left;
 }
 
+.tag {
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    background-color: #eeeeee;
+    padding: 3px;
+}
+
 .cover {
     float: left;
     width: 100px;

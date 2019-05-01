@@ -8,6 +8,7 @@ return [
     'nav' => [
         // URL => Link label
         'books' => 'Books',
+        'books/search' => 'Search',
         'books/create' => 'Add a book',
         'practice' => 'Practice',
         'about' => 'About',

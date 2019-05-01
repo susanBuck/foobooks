@@ -6,6 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 
 class Book extends Model
 {
+    /**
+     * One to Many Books and Author
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function author()
+    {
+        # Book belongs to Author
+        # Define an inverse one-to-many relationship.
+        return $this->belongsTo('App\Author');
+    }
+
+    /**
+     * Many to Many Books and Tags
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tags()
+    {
+        # withTimestamps will ensure the pivot table has its created_at/updated_at fields automatically maintained
+        return $this->belongsToMany('App\Tag')->withTimestamps();
+    }
+
     /*
     * Dump the essential details of books to the page
     * Used when practicing queries and you want to quickly see the books in the database
@@ -25,7 +46,7 @@ class Book extends Model
 
         # Load the data array with the book info we want
         foreach ($books as $book) {
-            $data[] = $book->title . ' by ' . $book->author . ' published in '. $book->published_year;
+            $data[] = $book->title . ' by ' . $book->author . ' published in ' . $book->published_year;
         }
 
         dump($data);

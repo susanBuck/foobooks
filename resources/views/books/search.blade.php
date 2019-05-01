@@ -5,6 +5,10 @@
     Search
 @endsection
 
+@section('head')
+    <link href='/css/books/search.css' rel='stylesheet'>
+@endsection
+
 @section('content')
     <h1>Search</h1>
 
@@ -20,24 +24,26 @@
         </fieldset>
 
         <input type='submit' value='Search' class='btn btn-primary'>
-
-
-
     </form>
 
     @if($searchTerm)
-        <h2>Results for query: <em>{{ $searchTerm }}</em></h2>
+        <div id='results'>
+            <h2>
+                {{ count($searchResults) }} {{ str_plural('Result', count($searchResults)) }} for
+                <em>“{{ $searchTerm }}”</em>
+            </h2>
 
-        @if(count($searchResults) == 0)
-            No matches found.
-        @else
-            @foreach($searchResults as $title => $book)
-                <div class='book'>
-                    <h3>{{ $title }}</h3>
-                    <h4>by {{ $book['author'] }}</h4>
-                    <img src='{{ $book['cover_url'] }}' alt='Cover image for the book {{ $title }}'>
-                </div>
-            @endforeach
-        @endif
+            @if(count($searchResults) == 0)
+                No matches found.
+            @else
+                <ul>
+                    @foreach($searchResults as $book)
+                        <li><a href='/books/{{$book->id}}'>{{ $book->title }} by {{ $book->author->getFullname() }}</a>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+        </div>
     @endif
+
 @endsection
