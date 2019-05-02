@@ -7,16 +7,20 @@ use App;
 use App\Book;
 use App\Author;
 use App\Tag;
+use Gate;
 
 class BookController extends Controller
 {
     /*
      * GET /books
      */
-    public function index()
+    public function index(Request $request)
     {
-        # Get all the books from our library
-        $books = Book::with('author')->orderBy('title')->get();
+        # Get the user object
+        $user = $request->user();
+
+        # Get this user's books
+        $books = $user->books()->orderBy('title')->get();
 
         # Query on the existing collection to get our recently added books
         $newBooks = $books->sortByDesc('created_at')->take(3);
@@ -30,9 +34,13 @@ class BookController extends Controller
     /*
      * GET /books/{id}
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $book = Book::with('author')->find($id);
+
+        if (!Gate::allows('books.manage', $book)) {
+            return redirect('/books')->with(['alert' => 'Access denied.']);
+        }
 
         if (!$book) {
             return redirect('/books')->with(['alert' => 'Book not found']);
@@ -75,9 +83,9 @@ class BookController extends Controller
 
         if ($caseSensitive) {
             # Ref: https://stackoverflow.com/questions/25494849/case-sensitive-where-statement-in-laravel
-            $searchResults = Book::whereRaw("BINARY `title`= ?", [$searchTerm])->get();
+            $searchResults = $request->user()->books()->whereRaw("BINARY `title`= ?", [$searchTerm])->get();
         } else {
-            $searchResults = Book::where('title', $searchTerm)->get();
+            $searchResults = $request->user()->books()->where('title', $searchTerm)->get();
         }
 
         return redirect('/books/search')->with([
@@ -125,6 +133,7 @@ class BookController extends Controller
         $book->published_year = $request->published_year;
         $book->cover_url = $request->cover_url;
         $book->purchase_url = $request->purchase_url;
+        $book->user_id = $request->user()->id; # <--- NEW LINE
         $book->save();
 
         # Note: Have to sync tags *after* the book has been saved so there's a book_id to store in the pivot table
@@ -139,6 +148,10 @@ class BookController extends Controller
     public function edit($id)
     {
         $book = Book::find($id);
+
+        if (!Gate::allows('books.manage', $book)) {
+            return redirect('/books')->with(['alert' => 'Access denied.']);
+        }
 
         $authors = Author::getForDropdown();
 
@@ -164,6 +177,11 @@ class BookController extends Controller
     public function update(Request $request, $id)
     {
         $book = Book::find($id);
+
+        if (!Gate::allows('books.manage', $book)) {
+            return redirect('/books')->with(['alert' => 'Access denied.']);
+        }
+
         $book->title = $request->title;
         $book->author_id = $request->author_id;
         $book->published_year = $request->published_year;
@@ -184,6 +202,10 @@ class BookController extends Controller
     {
         $book = Book::find($id);
 
+        if (!Gate::allows('books.manage', $book)) {
+            return redirect('/books')->with(['alert' => 'Access denied.']);
+        }
+
         if (!$book) {
             return redirect('/books')->with(['alert' => 'Book not found']);
         }
@@ -200,6 +222,10 @@ class BookController extends Controller
     public function destroy($id)
     {
         $book = Book::find($id);
+
+        if (!Gate::allows('books.manage', $book)) {
+            return redirect('/books')->with(['alert' => 'Access denied.']);
+        }
 
         $book->tags()->detach();
 

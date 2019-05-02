@@ -8,6 +8,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    /**
+     * One to Many User and Books
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function books()
+    {
+        return $this->hasMany('App\Book');
+    }
+
     use Notifiable;
 
     /**

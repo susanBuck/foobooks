@@ -44,6 +44,7 @@ class BooksTableSeeder extends Seeder
             $book->published_year = $bookData[2];
             $book->cover_url = $bookData[3];
             $book->purchase_url = $bookData[4];
+            $book->user_id = 1;
 
             $book->save();
             $count--;

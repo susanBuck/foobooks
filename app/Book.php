@@ -27,6 +27,15 @@ class Book extends Model
         return $this->belongsToMany('App\Tag')->withTimestamps();
     }
 
+    /**
+     * One to Many Books and User
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
     /*
     * Dump the essential details of books to the page
     * Used when practicing queries and you want to quickly see the books in the database

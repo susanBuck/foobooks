@@ -28,17 +28,26 @@
     <a href='/'><img src='/images/foobooks-logo@2x.png' id='logo' alt='Foobooks Logo'></a>
     <nav>
         <ul>
-            @foreach(config('app.nav') as $link => $label)
+            @foreach(config('app.nav'.Auth::check()) as $link => $label)
                 <li>
                     {{-- If the current path is the same as this link, display as plain text, not a hyperlink--}}
                     @if(Request::is($link))
                         {{ $label }}
-                    {{-- Otherwise, display as a hyerlink --}}
+                        {{-- Otherwise, display as a hyerlink --}}
                     @else
                         <a href='/{{ $link }}'>{{ $label }}</a>
                     @endif
                 </li>
             @endforeach
+
+            @if(Auth::check())
+                <li>
+                    <form method='POST' id='logout' action='/logout'>
+                        {{ csrf_field() }}
+                        <a href='#' onClick='document.getElementById("logout").submit();'>Logout {{ $user->name }}</a>
+                    </form>
+                </li>
+            @endif
         </ul>
     </nav>
 </header>

@@ -1,11 +1,18 @@
 <?php
 
 return [
-
-
     'githubUrl' => 'https://github.com/susanBuck/foobooks',
 
+    # Guest navigation links
     'nav' => [
+        'register' => 'Register',
+        'login' => 'Login',
+        'about' => 'About',
+        'contact' => 'Contact',
+    ],
+
+    # Logged-in user navigation links
+    'nav1' => [
         // URL => Link label
         'books' => 'Books',
         'books/search' => 'Search',
@@ -187,6 +194,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+        App\Providers\ViewServiceProvider::class, # <-- NEW
 
     ],
 
